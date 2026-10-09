@@ -77,6 +77,27 @@ st.info(
 # - Valida que el archivo tenga las columnas necesarias.
 # - Permite descargar df_filtrado con st.download_button.
 
+archivo = st.file_uploader("Carga un archivo CSV", type="csv")
+if archivo is not None:
+    datos_cargados = pd.read_csv(archivo)
+
+columnas_requeridas = {"Fecha", "Área", "Región", "Casos"}
+columnas_faltantes = columnas_requeridas - set(datos_cargados.columns)
+
+if columnas_faltantes:
+    st.error(f"Faltan columnas: {columnas_faltantes}")
+
+csv = df_filtrado.to_csv(index=False).encode("utf-8")
+
+st.download_button(
+    "Descargar datos filtrados",
+    data=csv,
+    file_name="datos_filtrados.csv",
+    mime="text/csv",
+)
+
+
+
 # TODO OPCIÓN C: Simulador
 # - Solicita al menos dos valores al usuario.
 # - Realiza un cálculo con esos valores.
